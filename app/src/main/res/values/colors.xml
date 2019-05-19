@@ -3,4 +3,5 @@
     <drawable name="actionbar_color">#ffcc0000</drawable>
     <drawable name="white_color">#ffffffff</drawable>
     <drawable name="gray_color">#ff666666</drawable>
+    <color name="dark_gray_text">#404040</color>
 </resources>
