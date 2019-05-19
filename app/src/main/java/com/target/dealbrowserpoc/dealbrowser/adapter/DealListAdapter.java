@@ -62,7 +62,7 @@ public class DealListAdapter extends RealmRecyclerViewAdapter<Deal, DealListAdap
         void update(Deal deal) {
             titleLabel.setText(deal.getTitle());
             priceLabel.setText(deal.getPrice()); // TODO: display sale if cheaper?
-            aisleLabel.setText(deal.getAisle());
+            aisleLabel.setText(deal.getAisle().toUpperCase());
             glide.load(deal.getImageUrl())
                     .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
