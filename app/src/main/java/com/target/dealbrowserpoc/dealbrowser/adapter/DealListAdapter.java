@@ -32,7 +32,7 @@ public class DealListAdapter extends RealmRecyclerViewAdapter<Deal, DealListAdap
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(context)
-                .inflate(R.layout.view_deal_list_adapter, viewGroup, false);
+                .inflate(R.layout.view_deal_linear_adapter, viewGroup, false);
         return new ViewHolder(view);
     }
 

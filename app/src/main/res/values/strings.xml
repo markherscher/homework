@@ -4,4 +4,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="product_image_content_description">Product Image</string>
+
+    <string name="or">or</string>
+    <string name="ship">Ship</string>
 </resources>
