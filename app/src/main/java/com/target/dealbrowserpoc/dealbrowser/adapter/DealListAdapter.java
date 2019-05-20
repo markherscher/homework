@@ -2,6 +2,7 @@ package com.target.dealbrowserpoc.dealbrowser.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,16 +17,21 @@ import com.target.dealbrowserpoc.dealbrowser.model.Deal;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.realm.RealmRecyclerViewAdapter;
 
 public class DealListAdapter extends RealmRecyclerViewAdapter<Deal, DealListAdapter.ViewHolder> {
     private final Context context;
     private final GlideRequests glide;
+    private final Listener listener;
 
-    public DealListAdapter(Context context, GlideRequests glide) {
+    public DealListAdapter(@NonNull Context context,
+                           @NonNull GlideRequests glide,
+                           @Nullable Listener listener) {
         super(null, true);
         this.context = context;
         this.glide = glide;
+        this.listener = listener;
     }
 
     @NonNull
@@ -68,5 +74,17 @@ public class DealListAdapter extends RealmRecyclerViewAdapter<Deal, DealListAdap
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(imageView); // TODO: add placeholder
         }
+
+        @OnClick(R.id.container)
+        void onClicked() {
+            Deal deal = getItem(getAdapterPosition());
+            if (deal != null && listener != null) {
+                listener.onItemClicked(deal);
+            }
+        }
+    }
+
+    public interface Listener {
+        void onItemClicked(@NonNull Deal deal);
     }
 }

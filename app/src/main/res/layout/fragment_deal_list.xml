@@ -5,6 +5,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
+        android:background="#C2C2C2"
         android:layout_height="match_parent" />
 
 </FrameLayout>
