@@ -4,5 +4,5 @@
     <drawable name="white_color">#ffffffff</drawable>
     <drawable name="gray_color">#ff666666</drawable>
     <color name="dark_gray_text">#404040</color>
-    <color name="target_red">#ffcc0000</color>
+    <color name="target_red">#BE2C34</color>
 </resources>

@@ -62,8 +62,10 @@ public class DealApiService extends IntentService {
                     for (DealApi dealApi : dataList.data) {
                         // Require GUID to be set; anything else can be null
                         if (dealApi != null && dealApi.guid != null) {
-                            r.copyToRealmOrUpdate(new Deal(dealApi.guid,
+                            r.copyToRealmOrUpdate(new Deal(
+                                    dealApi.guid,
                                     dealApi.title,
+                                    dealApi.description,
                                     dealApi.image,
                                     dealApi.salePrice,
                                     dealApi.price,

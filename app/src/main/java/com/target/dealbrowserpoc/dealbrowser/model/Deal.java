@@ -35,6 +35,7 @@ public class Deal extends RealmObject {
 
     public Deal(@NonNull String guid,
                 @Nullable String title,
+                @Nullable String description,
                 @Nullable String imageUrl,
                 @Nullable String salePrice,
                 @Nullable String price,
