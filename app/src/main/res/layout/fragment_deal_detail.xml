@@ -41,14 +41,14 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
                 android:contentDescription="@string/product_image_content_description"
-                app:layout_constraintBottom_toTopOf="@+id/price"
+                app:layout_constraintBottom_toTopOf="@+id/actual_price"
                 app:layout_constraintEnd_toEndOf="@+id/guideline_end"
                 app:layout_constraintHeight_min="300dp"
                 app:layout_constraintStart_toStartOf="@+id/guideline_start"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/price"
+                android:id="@+id/actual_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"

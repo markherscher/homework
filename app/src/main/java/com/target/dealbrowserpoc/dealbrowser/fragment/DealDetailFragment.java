@@ -27,8 +27,8 @@ public class DealDetailFragment extends BaseFragment {
     @BindView(R.id.description)
     TextView descriptionLabel;
 
-    @BindView(R.id.price)
-    TextView priceLabel;
+    @BindView(R.id.actual_price)
+    TextView actualPriceLabel;
 
     @BindView(R.id.regular_price)
     TextView regularPriceLabel;
@@ -79,10 +79,18 @@ public class DealDetailFragment extends BaseFragment {
     }
 
     private void showDeal(Deal deal) {
+        // If there is no sales price then use the actual price only; otherwise, use the sale
+        // price for the actual price and the price for the "regular" price
+        if (deal.getSalePrice().isEmpty()) {
+            actualPriceLabel.setText(deal.getPrice());
+            regularPriceLabel.setText("");
+        } else {
+            actualPriceLabel.setText(deal.getSalePrice());
+            regularPriceLabel.setText(String.format("Reg: %s", deal.getPrice()));
+        }
+
         titleLabel.setText(deal.getTitle());
         descriptionLabel.setText(deal.getDescription());
-        priceLabel.setText(deal.getPrice());
-        regularPriceLabel.setText(deal.getSalePrice()); // TODO fix
         GlideApp.with(this).load(deal.getImageUrl())
                 .centerInside()
                 .diskCacheStrategy(DiskCacheStrategy.NONE)

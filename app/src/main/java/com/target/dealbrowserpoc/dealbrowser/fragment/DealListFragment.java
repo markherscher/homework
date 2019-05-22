@@ -3,11 +3,14 @@ package com.target.dealbrowserpoc.dealbrowser.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.target.dealbrowserpoc.dealbrowser.R;
 import com.target.dealbrowserpoc.dealbrowser.adapter.DealListAdapter;
@@ -18,18 +21,28 @@ import com.target.dealbrowserpoc.dealbrowser.model.Deal;
 import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.realm.Realm;
+import io.realm.RealmQuery;
 
 public class DealListFragment extends BaseFragment {
+    private static final String LAYOUT_MODE_KEY = "layout-mode-key";
+    private static final int LAYOUT_MODE_LIST = 0;
+    private static final int LAYOUT_MODE_GRID = 1;
+
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-
+    @BindView(R.id.layout_switcher)
+    ImageView layoutSwitcher;
+    @BindView(R.id.search)
+    SearchView searchView;
     @BindDimen(R.dimen.deal_list_separator_height)
     int rowSeparatorHeight;
 
     private DealListAdapter adapter;
     private Realm realm;
     private Listener listener;
+    private int layoutMode;
 
     public static DealListFragment newInstance() {
         return new DealListFragment();
@@ -51,7 +64,12 @@ public class DealListFragment extends BaseFragment {
                 });
         recyclerView.setAdapter(adapter);
 
-        showAsLinearList();
+
+        layoutMode = savedInstanceState == null
+                ? LAYOUT_MODE_LIST
+                : savedInstanceState.getInt(LAYOUT_MODE_KEY, LAYOUT_MODE_LIST);
+
+        setupAdapter();
         return view;
     }
 
@@ -59,12 +77,15 @@ public class DealListFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         realm = Realm.getDefaultInstance();
+        searchView.setOnQueryTextListener(searchViewListener);
         executeQuery();
     }
 
     @Override
     public void onPause() {
+        // Clear query text listener because it depends on Realm being open
         super.onPause();
+        searchView.setOnQueryTextListener(null);
         realm.close();
     }
 
@@ -82,26 +103,72 @@ public class DealListFragment extends BaseFragment {
         listener = null;
     }
 
+    public void onSaveInstanceState(@NonNull Bundle out) {
+        super.onSaveInstanceState(out);
+        out.putInt(LAYOUT_MODE_KEY, layoutMode);
+    }
+
+    @OnClick(R.id.layout_switcher)
+    void onLayoutChangeClicked() {
+        layoutMode = layoutMode == LAYOUT_MODE_GRID ? LAYOUT_MODE_LIST : LAYOUT_MODE_GRID;
+        setupAdapter();
+    }
+
+    @OnClick(R.id.sort)
+    void onSortClicked() {
+
+    }
+
     private void handleDealClicked(Deal deal) {
         if (listener != null) {
             listener.onDealClicked(this, deal);
         }
     }
 
-    private void showAsLinearList() {
+    private void setupAdapter() {
         int count = recyclerView.getItemDecorationCount();
         for (int i = 0; i < count; i++) {
             recyclerView.removeItemDecorationAt(i);
         }
 
-        recyclerView.addItemDecoration(new LinearLayoutMarginDecorator(rowSeparatorHeight));
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        switch (layoutMode) {
+            default:
+                recyclerView.addItemDecoration(new LinearLayoutMarginDecorator(rowSeparatorHeight));
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                layoutSwitcher.setImageResource(R.drawable.list_option);
+                break;
+
+            case LAYOUT_MODE_GRID:
+                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                layoutSwitcher.setImageResource(R.drawable.grid_option);
+                break;
+        }
+
         adapter.notifyDataSetChanged();
     }
 
     private void executeQuery() {
-        adapter.updateData(realm.where(Deal.class).sort(Deal.ORDER).findAllAsync());
+        String nameSearch = searchView.getQuery().toString().trim();
+        RealmQuery<Deal> query = realm.where(Deal.class).sort(Deal.ORDER);
+        if (!nameSearch.isEmpty()) {
+            query = query.contains(Deal.TITLE, nameSearch);
+        }
+
+        adapter.updateData(query.findAllAsync());
     }
+
+    private SearchView.OnQueryTextListener searchViewListener = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String s) {
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String s) {
+            executeQuery();
+            return false;
+        }
+    };
 
     public interface Listener {
         void onDealClicked(@NonNull DealListFragment sender, @NonNull Deal deal);
