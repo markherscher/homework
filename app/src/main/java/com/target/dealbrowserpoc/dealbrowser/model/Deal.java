@@ -10,12 +10,13 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 public class Deal extends RealmObject {
+    // Field name definitions, for use by Realm queries
     public final static String GUID = "guid";
     public final static String TITLE = "title";
     public final static String DESCRIPTION = "description";
     public final static String IMAGE_URL = "imageUrl";
-    public final static String SALES_PRICE = "salePrice";
-    public final static String PRICE = "price";
+    public final static String ACTUAL_PRICE = "actualPrice";
+    public final static String REGULAR_PRICE = "regularPrice";
     public final static String AISLEE = "aisle";
     public final static String ORDER = "order";
 
@@ -24,8 +25,8 @@ public class Deal extends RealmObject {
     private String title;
     private String description;
     private String imageUrl;
-    private String salePrice;
-    private String price;
+    private int actualPrice;
+    private int regularPrice;
     private String aisle;
     private int order;
 
@@ -37,16 +38,16 @@ public class Deal extends RealmObject {
                 @Nullable String title,
                 @Nullable String description,
                 @Nullable String imageUrl,
-                @Nullable String salePrice,
-                @Nullable String price,
+                int actualPrice,
+                int regularPrice,
                 @Nullable String aisle,
                 int order) {
         this.guid = guid;
         this.title = Objects.toString(title, "");
         this.description = Objects.toString(description, "");
         this.imageUrl = Objects.toString(imageUrl, "");
-        this.salePrice = Objects.toString(salePrice, "");
-        this.price = Objects.toString(price, "");
+        this.actualPrice = actualPrice;
+        this.regularPrice = regularPrice;
         this.aisle = Objects.toString(aisle, "");
         this.order = order;
     }
@@ -71,14 +72,20 @@ public class Deal extends RealmObject {
         return imageUrl;
     }
 
-    @NonNull
-    public String getSalePrice() {
-        return salePrice;
+    /**
+     * Gets the actual price. Might be the same as regular price.
+     * @return the price, in cents
+     */
+    public int getActualPrice() {
+        return actualPrice;
     }
 
-    @NonNull
-    public String getPrice() {
-        return price;
+    /**
+     * Gets the regular price. Might be the same as actual price.
+     * @return the price, in cents
+     */
+    public int getRegularPrice() {
+        return regularPrice;
     }
 
     @NonNull
@@ -86,7 +93,6 @@ public class Deal extends RealmObject {
         return aisle;
     }
 
-    @NonNull
     public int getOrder() {
         return order;
     }
@@ -105,8 +111,8 @@ public class Deal extends RealmObject {
                     TextUtils.equals(title, other.title) &&
                     TextUtils.equals(description, other.description) &&
                     TextUtils.equals(imageUrl, other.imageUrl) &&
-                    TextUtils.equals(salePrice, other.salePrice) &&
-                    TextUtils.equals(price, other.price) &&
+                    actualPrice == other.actualPrice &&
+                    regularPrice == other.regularPrice &&
                     TextUtils.equals(aisle, other.aisle) &&
                     order == other.order;
         }

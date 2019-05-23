@@ -53,6 +53,34 @@ public class DealApiService extends IntentService {
         realm.close();
     }
 
+    /**
+     * This is a very quick and dirty way to convert a string such as "$2.04" to 204. I am not
+     * putting a lot of effort into this conversion because this is secondary to what the app
+     * demonstrates, and in a real-life situation the API might give us the prices as numbers
+     * anyway.
+     * @param dollarsString a string, such as "$2.03"
+     * @return the cents value
+     */
+    private int dollarStringToCentsValue(String dollarsString) {
+        final String currency = "$";
+        final int CENTS_PER_DOLLAR = 100;
+        int centsValue = 0;
+
+        if (dollarsString != null && dollarsString.length() > 0) {
+            float dollarsValue = 0f;
+
+            try {
+                dollarsValue = Float.parseFloat(dollarsString.replace(currency, ""));
+            } catch (NumberFormatException e) {
+                // Oh well, what can we do?
+            }
+
+            centsValue = (int) (dollarsValue * CENTS_PER_DOLLAR);
+        }
+
+        return centsValue;
+    }
+
     private void copyApiListToRealm(final DataListApi<DealApi> dataList) {
         if (dataList != null && dataList.data != null) {
             Timber.d("Received deals list of length %d", dataList.data.size());
@@ -62,13 +90,19 @@ public class DealApiService extends IntentService {
                     for (DealApi dealApi : dataList.data) {
                         // Require GUID to be set; anything else can be null
                         if (dealApi != null && dealApi.guid != null) {
+                            int salesPriceCents = dollarStringToCentsValue(dealApi.salePrice);
+                            int priceCents = dollarStringToCentsValue(dealApi.price);
+
+                            // If sale price is 0 then there is no sale
+                            int actualPrice = salesPriceCents == 0 ? priceCents : salesPriceCents;
+
                             r.copyToRealmOrUpdate(new Deal(
                                     dealApi.guid,
                                     dealApi.title,
                                     dealApi.description,
                                     dealApi.image,
-                                    dealApi.salePrice,
-                                    dealApi.price,
+                                    actualPrice,
+                                    priceCents,
                                     dealApi.aisle,
                                     dealApi.index));
                         }

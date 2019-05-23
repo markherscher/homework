@@ -7,4 +7,8 @@
 
     <string name="or">or</string>
     <string name="ship">Ship</string>
+    <string name="sort_name">Name</string>
+    <string name="sort_price_descending">Price (high to low)</string>
+    <string name="sort_price_ascending">Price (low to high)</string>
+    <string name="regular_price_fmt">Reg: %s</string>
 </resources>

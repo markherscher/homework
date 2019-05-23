@@ -15,12 +15,17 @@ import com.target.dealbrowserpoc.dealbrowser.R;
 import com.target.dealbrowserpoc.dealbrowser.core.GlideRequests;
 import com.target.dealbrowserpoc.dealbrowser.model.Deal;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.RealmRecyclerViewAdapter;
 
 public class DealListAdapter extends RealmRecyclerViewAdapter<Deal, DealListAdapter.ViewHolder> {
+    private final NumberFormat dollarFormat = new DecimalFormat("$0.00");
+    private final int CENTS_PER_DOLLAR = 100;
     private final Context context;
     private final GlideRequests glide;
     private final Listener listener;
@@ -67,7 +72,7 @@ public class DealListAdapter extends RealmRecyclerViewAdapter<Deal, DealListAdap
 
         void update(Deal deal) {
             titleLabel.setText(deal.getTitle());
-            priceLabel.setText(deal.getPrice()); // TODO: display sale if cheaper?
+            priceLabel.setText(dollarFormat.format(deal.getActualPrice() / (float) CENTS_PER_DOLLAR));
             aisleLabel.setText(deal.getAisle().toUpperCase());
             glide.load(deal.getImageUrl())
                     .centerCrop()

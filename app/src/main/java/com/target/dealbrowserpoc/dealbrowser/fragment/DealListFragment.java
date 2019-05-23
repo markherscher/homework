@@ -17,15 +17,18 @@ import com.target.dealbrowserpoc.dealbrowser.adapter.DealListAdapter;
 import com.target.dealbrowserpoc.dealbrowser.adapter.LinearLayoutMarginDecorator;
 import com.target.dealbrowserpoc.dealbrowser.core.GlideApp;
 import com.target.dealbrowserpoc.dealbrowser.model.Deal;
+import com.target.dealbrowserpoc.dealbrowser.model.Sort;
 
 import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 
-public class DealListFragment extends BaseFragment {
+public class DealListFragment extends BaseFragment
+        implements SimpleChoiceDialog.Delegate<Sort>, SimpleChoiceDialog.Listener<Sort> {
     private static final String LAYOUT_MODE_KEY = "layout-mode-key";
     private static final int LAYOUT_MODE_LIST = 0;
     private static final int LAYOUT_MODE_GRID = 1;
@@ -40,9 +43,11 @@ public class DealListFragment extends BaseFragment {
     int rowSeparatorHeight;
 
     private DealListAdapter adapter;
+    private SimpleChoiceDialog sortDialog;
     private Realm realm;
     private Listener listener;
     private int layoutMode;
+    private Sort sort;
 
     public static DealListFragment newInstance() {
         return new DealListFragment();
@@ -87,6 +92,11 @@ public class DealListFragment extends BaseFragment {
         super.onPause();
         searchView.setOnQueryTextListener(null);
         realm.close();
+
+        if (sortDialog != null) {
+            sortDialog.dismiss();
+            sortDialog = null;
+        }
     }
 
     @Override
@@ -116,7 +126,40 @@ public class DealListFragment extends BaseFragment {
 
     @OnClick(R.id.sort)
     void onSortClicked() {
+        Context context = getContext();
+        if (context != null) {
+            sortDialog = new SimpleChoiceDialog<>(
+                    context,
+                    this,
+                    this,
+                    Sort.values(),
+                    R.layout.dialog_sort,
+                    R.layout.view_simple_list_adapter);
+            sortDialog.show();
+        }
+    }
 
+    @NonNull
+    @Override
+    public String getStringForItem(Sort value) {
+        switch (value) {
+            case NAME:
+                return getString(R.string.sort_name);
+            case PRICE_ASCENDING:
+                return getString(R.string.sort_price_ascending);
+            case PRICE_DESCENDING:
+                return getString(R.string.sort_price_descending);
+            default:
+                return "";
+        }
+    }
+
+    @Override
+    public void onItemSelected(Sort item) {
+        if (sort != item) {
+            sort = item;
+            executeQuery();
+        }
     }
 
     private void handleDealClicked(Deal deal) {
@@ -149,9 +192,17 @@ public class DealListFragment extends BaseFragment {
 
     private void executeQuery() {
         String nameSearch = searchView.getQuery().toString().trim();
-        RealmQuery<Deal> query = realm.where(Deal.class).sort(Deal.ORDER);
+        RealmQuery<Deal> query = realm.where(Deal.class);
         if (!nameSearch.isEmpty()) {
-            query = query.contains(Deal.TITLE, nameSearch);
+            query = query.contains(Deal.TITLE, nameSearch, Case.INSENSITIVE);
+        }
+
+        if (sort == Sort.PRICE_ASCENDING) {
+            query = query.sort(Deal.ACTUAL_PRICE, io.realm.Sort.ASCENDING);
+        } else if (sort == Sort.PRICE_DESCENDING) {
+            query = query.sort(Deal.ACTUAL_PRICE, io.realm.Sort.DESCENDING);
+        } else {
+            query = query.sort(Deal.TITLE, io.realm.Sort.ASCENDING);
         }
 
         adapter.updateData(query.findAllAsync());

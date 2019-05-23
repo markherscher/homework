@@ -13,13 +13,18 @@ import com.target.dealbrowserpoc.dealbrowser.R;
 import com.target.dealbrowserpoc.dealbrowser.core.GlideApp;
 import com.target.dealbrowserpoc.dealbrowser.model.Deal;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
 
 public class DealDetailFragment extends BaseFragment {
-    private final static String GUID_KEY ="guid-key";
+    private final static String GUID_KEY = "guid-key";
+    private final int CENTS_PER_DOLLAR = 100;
+    private final NumberFormat dollarFormat = new DecimalFormat("$0.00");
 
     @BindView(R.id.title)
     TextView titleLabel;
@@ -81,13 +86,17 @@ public class DealDetailFragment extends BaseFragment {
     private void showDeal(Deal deal) {
         // If there is no sales price then use the actual price only; otherwise, use the sale
         // price for the actual price and the price for the "regular" price
-        if (deal.getSalePrice().isEmpty()) {
-            actualPriceLabel.setText(deal.getPrice());
-            regularPriceLabel.setText("");
-        } else {
-            actualPriceLabel.setText(deal.getSalePrice());
-            regularPriceLabel.setText(String.format("Reg: %s", deal.getPrice()));
+        int actualPrice = deal.getActualPrice();
+        int regularPrice = deal.getRegularPrice();
+        String regularPriceText = "";
+
+        if (actualPrice != regularPrice) {
+            regularPriceText = getString(R.string.regular_price_fmt,
+                    dollarFormat.format(regularPrice / (float) CENTS_PER_DOLLAR));
         }
+
+        regularPriceLabel.setText(regularPriceText);
+        actualPriceLabel.setText(dollarFormat.format(actualPrice / (float) CENTS_PER_DOLLAR));
 
         titleLabel.setText(deal.getTitle());
         descriptionLabel.setText(deal.getDescription());
