@@ -1,5 +1,6 @@
 package com.target.dealbrowserpoc.dealbrowser.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.target.dealbrowserpoc.dealbrowser.R;
+import com.target.dealbrowserpoc.dealbrowser.activity.PhotoActivity;
 import com.target.dealbrowserpoc.dealbrowser.core.GlideApp;
 import com.target.dealbrowserpoc.dealbrowser.model.Deal;
 
@@ -41,6 +43,8 @@ public class DealDetailFragment extends BaseFragment {
     @BindView(R.id.image)
     ImageView imageView;
 
+    private String imageUrl;
+
     public static DealDetailFragment newInstance(@NonNull String dealGuid) {
         DealDetailFragment fragment = new DealDetailFragment();
         Bundle args = new Bundle();
@@ -67,6 +71,7 @@ public class DealDetailFragment extends BaseFragment {
         if (deal == null) {
             throw new IllegalArgumentException("failed to find Deal");
         }
+        imageUrl = deal.getImageUrl();
         showDeal(deal);
         realm.close();
 
@@ -81,6 +86,13 @@ public class DealDetailFragment extends BaseFragment {
     @OnClick(R.id.add_to_cart)
     void onAddToCartClicked() {
 
+    }
+
+    @OnClick(R.id.image)
+    void onImageClicked() {
+        Intent intent = new Intent(getContext(), PhotoActivity.class);
+        intent.putExtra(PhotoActivity.IMAGE_URL_KEY, imageUrl);
+        startActivity(intent);
     }
 
     private void showDeal(Deal deal) {
