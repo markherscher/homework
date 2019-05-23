@@ -69,7 +69,6 @@ public class DealListFragment extends BaseFragment
                 });
         recyclerView.setAdapter(adapter);
 
-
         layoutMode = savedInstanceState == null
                 ? LAYOUT_MODE_LIST
                 : savedInstanceState.getInt(LAYOUT_MODE_KEY, LAYOUT_MODE_LIST);

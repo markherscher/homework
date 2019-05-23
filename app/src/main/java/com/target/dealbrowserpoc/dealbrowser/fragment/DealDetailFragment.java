@@ -3,6 +3,9 @@ package com.target.dealbrowserpoc.dealbrowser.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.StrikethroughSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,11 +103,18 @@ public class DealDetailFragment extends BaseFragment {
         // price for the actual price and the price for the "regular" price
         int actualPrice = deal.getActualPrice();
         int regularPrice = deal.getRegularPrice();
-        String regularPriceText = "";
+        CharSequence regularPriceText = "";
 
         if (actualPrice != regularPrice) {
-            regularPriceText = getString(R.string.regular_price_fmt,
-                    dollarFormat.format(regularPrice / (float) CENTS_PER_DOLLAR));
+            // Strike out the price portion
+            String pricePortion = dollarFormat.format(regularPrice / (float) CENTS_PER_DOLLAR);
+            SpannableString span = new SpannableString(getString(R.string.regular_price_fmt, pricePortion));
+            span.setSpan(new StrikethroughSpan(),
+                    span.length() - pricePortion.length(),
+                    span.length(),
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            regularPriceText = span;
         }
 
         regularPriceLabel.setText(regularPriceText);
