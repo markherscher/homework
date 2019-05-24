@@ -109,7 +109,7 @@
         android:gravity="center"
         android:text="@string/add_to_list"
         android:textColor="#404040"
-        android:textSize="24sp"
+        android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/add_to_cart"
         app:layout_constraintStart_toStartOf="parent" />
@@ -123,7 +123,7 @@
         android:gravity="center"
         android:text="@string/add_to_cart"
         android:textColor="#FFFFFF"
-        android:textSize="24sp"
+        android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/add_to_list" />

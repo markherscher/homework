@@ -2,6 +2,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:actionBarStyle">@style/TargetActionBar</item>
+        <item name="colorAccent">@color/target_red</item>
     </style>
 
     <style name="TargetActionBar"
