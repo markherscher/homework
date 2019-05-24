@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
@@ -20,6 +19,7 @@ import com.target.dealbrowserpoc.dealbrowser.model.Deal;
 import com.target.dealbrowserpoc.dealbrowser.model.Sort;
 
 import butterknife.BindDimen;
+import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -41,9 +41,12 @@ public class DealListFragment extends BaseFragment
     SearchView searchView;
     @BindDimen(R.dimen.deal_list_separator_height)
     int rowSeparatorHeight;
+    @BindInt(R.integer.deal_list_max_columns)
+    int maxColumns;
 
     private DealListAdapter adapter;
     private SimpleChoiceDialog sortDialog;
+    private RecyclerView.ItemDecoration linearDecorator;
     private Realm realm;
     private Listener listener;
     private int layoutMode;
@@ -68,6 +71,7 @@ public class DealListFragment extends BaseFragment
                     }
                 });
         recyclerView.setAdapter(adapter);
+        linearDecorator = new LinearLayoutMarginDecorator(rowSeparatorHeight);
 
         layoutMode = savedInstanceState == null
                 ? LAYOUT_MODE_LIST
@@ -168,25 +172,32 @@ public class DealListFragment extends BaseFragment
     }
 
     private void setupAdapter() {
-        int count = recyclerView.getItemDecorationCount();
-        for (int i = 0; i < count; i++) {
-            recyclerView.removeItemDecorationAt(i);
+        int layoutModeToUse = layoutMode;
+        if (maxColumns == 1) {
+            // Don't allow switching to grid view because it does nothing. Don't overwrite the
+            // value for the field 'layoutMode' though, because if it was in grid mode that
+            // should be activated when they rotate back
+            layoutModeToUse = LAYOUT_MODE_LIST;
+            layoutSwitcher.setVisibility(View.GONE);
         }
 
-        switch (layoutMode) {
+        int columnCount;
+
+        switch (layoutModeToUse) {
             default:
-                recyclerView.addItemDecoration(new LinearLayoutMarginDecorator(rowSeparatorHeight));
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                columnCount = 1;
+                recyclerView.addItemDecoration(linearDecorator);
                 layoutSwitcher.setImageResource(R.drawable.list_option);
                 break;
 
             case LAYOUT_MODE_GRID:
-                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                columnCount = maxColumns;
+                recyclerView.removeItemDecoration(linearDecorator);
                 layoutSwitcher.setImageResource(R.drawable.grid_option);
                 break;
         }
 
-        adapter.notifyDataSetChanged();
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), columnCount));
     }
 
     private void executeQuery() {
