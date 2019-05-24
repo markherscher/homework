@@ -113,14 +113,13 @@
 
     </ScrollView>
 
-
     <TextView
         android:id="@+id/add_to_list"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:background="#E0E0E0"
         android:gravity="center"
-        android:text="add to list"
+        android:text="@string/add_to_list"
         android:textColor="#404040"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -133,11 +132,11 @@
         android:layout_height="60dp"
         android:background="@color/target_red"
         android:gravity="center"
-        android:text="add to cart"
+        android:text="@string/add_to_cart"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/guideline_end"
         app:layout_constraintStart_toEndOf="@+id/add_to_list" />
 
 </android.support.constraint.ConstraintLayout>

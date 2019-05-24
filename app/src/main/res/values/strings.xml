@@ -8,7 +8,11 @@
     <string name="or">or</string>
     <string name="ship">Ship</string>
     <string name="sort_name">Name</string>
+    <string name="sort">Sort By</string>
+    <string name="toggle_layout">Toggle View Style</string>
     <string name="sort_price_descending">Price (high to low)</string>
     <string name="sort_price_ascending">Price (low to high)</string>
     <string name="regular_price_fmt">Reg: %s</string>
+    <string name="add_to_list">add to list</string>
+    <string name="add_to_cart">add to cart</string>
 </resources>
