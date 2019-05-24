@@ -15,4 +15,5 @@
     <string name="regular_price_fmt">Reg: %s</string>
     <string name="add_to_list">add to list</string>
     <string name="add_to_cart">add to cart</string>
+    <string name="add_to_cart_fmt">add to cart (%d)</string>
 </resources>

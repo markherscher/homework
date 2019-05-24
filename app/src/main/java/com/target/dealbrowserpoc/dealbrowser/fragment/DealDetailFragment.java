@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.target.dealbrowserpoc.dealbrowser.R;
 import com.target.dealbrowserpoc.dealbrowser.activity.PhotoActivity;
 import com.target.dealbrowserpoc.dealbrowser.core.GlideApp;
+import com.target.dealbrowserpoc.dealbrowser.model.CartEntry;
 import com.target.dealbrowserpoc.dealbrowser.model.Deal;
 
 import java.text.DecimalFormat;
@@ -25,6 +26,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
 public class DealDetailFragment extends BaseFragment {
     private final static String GUID_KEY = "guid-key";
@@ -43,10 +46,16 @@ public class DealDetailFragment extends BaseFragment {
     @BindView(R.id.regular_price)
     TextView regularPriceLabel;
 
+    @BindView(R.id.add_to_cart)
+    TextView addToCartButton;
+
     @BindView(R.id.image)
     ImageView imageView;
 
+    private String dealGuid;
     private String imageUrl;
+    private Realm realm;
+    private RealmResults<CartEntry> cartResults;
 
     public static DealDetailFragment newInstance(@NonNull String dealGuid) {
         DealDetailFragment fragment = new DealDetailFragment();
@@ -57,28 +66,48 @@ public class DealDetailFragment extends BaseFragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle args = getArguments();
+        dealGuid = args == null ? null : args.getString(GUID_KEY);
+        if (dealGuid == null) {
+            throw new IllegalArgumentException("missing deal GUID");
+        }
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_deal_detail, container, false);
         ButterKnife.bind(this, view);
+        return view;
+    }
 
-        Bundle args = getArguments();
-        String dealGuid = args == null ? null : args.getString(GUID_KEY);
-        if (dealGuid == null) {
-            throw new IllegalArgumentException("missing deal GUID");
-        }
+    @Override
+    public void onResume() {
+        super.onResume();
 
-        Realm realm = Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
+
         Deal deal = realm.where(Deal.class).equalTo(Deal.GUID, dealGuid).findFirst();
         if (deal == null) {
             throw new IllegalArgumentException("failed to find Deal");
         }
+
         imageUrl = deal.getImageUrl();
         showDeal(deal);
-        realm.close();
+        cartResults = realm.where(CartEntry.class).equalTo(CartEntry.DEAL_GUID, dealGuid)
+                .findAllAsync();
+        cartResults.addChangeListener(new CartChangeListener());
+    }
 
-        return view;
+    @Override
+    public void onPause() {
+        super.onPause();
+        cartResults.removeAllChangeListeners();
+        realm.close();
     }
 
     @OnClick(R.id.add_to_list)
@@ -88,7 +117,7 @@ public class DealDetailFragment extends BaseFragment {
 
     @OnClick(R.id.add_to_cart)
     void onAddToCartClicked() {
-
+        incrementCartCount();
     }
 
     @OnClick(R.id.image)
@@ -126,5 +155,37 @@ public class DealDetailFragment extends BaseFragment {
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(imageView); // TODO: add placeholder
+    }
+
+    private void incrementCartCount() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(@NonNull Realm r) {
+                CartEntry cartEntry = r.where(CartEntry.class)
+                        .equalTo(CartEntry.DEAL_GUID, dealGuid)
+                        .findFirst();
+
+                if (cartEntry == null) {
+                    cartEntry = new CartEntry(dealGuid, 0);
+                }
+
+                cartEntry.setCount(cartEntry.getCount() + 1);
+                r.copyToRealmOrUpdate(cartEntry);
+            }
+        });
+    }
+
+    private class CartChangeListener implements RealmChangeListener<RealmResults<CartEntry>> {
+        @Override
+        public void onChange(@NonNull RealmResults<CartEntry> cartEntries) {
+            CartEntry cart = cartEntries.first(null);
+            int count = cart == null ? 0 : cart.getCount();
+
+            if (count <= 0) {
+                addToCartButton.setText(getString(R.string.add_to_cart));
+            } else {
+                addToCartButton.setText(getString(R.string.add_to_cart_fmt, count));
+            }
+        }
     }
 }
