@@ -25,7 +25,7 @@ import io.realm.RealmRecyclerViewAdapter;
 
 public class DealListAdapter extends RealmRecyclerViewAdapter<Deal, DealListAdapter.ViewHolder> {
     private final NumberFormat dollarFormat = new DecimalFormat("$0.00");
-    private final int CENTS_PER_DOLLAR = 100;
+    private final static int CENTS_PER_DOLLAR = 100;
     private final Context context;
     private final GlideRequests glide;
     private final Listener listener;

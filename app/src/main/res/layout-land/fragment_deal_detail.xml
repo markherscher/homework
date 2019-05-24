@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="15dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="15dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_vert_middle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintVertical_bias="0"
+        android:contentDescription="@string/product_image_content_description"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/guideline_vert_middle"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@+id/guideline_start"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_max="300dp" />
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="15dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/add_to_list"
+        app:layout_constraintEnd_toEndOf="@+id/guideline_end"
+        app:layout_constraintStart_toEndOf="@+id/image"
+        app:layout_constraintTop_toTopOf="@+id/image">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/dark_gray_text"
+                android:textSize="30sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Product Title Here" />
+
+            <TextView
+                android:id="@+id/actual_price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:lines="1"
+                android:textColor="@color/target_red"
+                android:textSize="34sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/regular_price"
+                app:layout_constraintStart_toStartOf="@+id/title"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                tools:text="$8.00" />
+
+            <TextView
+                android:id="@+id/regular_price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="end"
+                android:lines="1"
+                android:textColor="#999999"
+                android:textSize="28sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/actual_price"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintVertical_chainStyle="spread"
+                tools:text="Reg: $8.00" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/actual_price"
+                tools:text="Maecenas eget augue a odio placerat molestie quis et felis. Morbi sollicitudin vestibulum velit, non convallis ipsum euismod id. Donec vehicula vel leo ut rutrum. Ut sed lorem vel sem vulputate porttitor a quis ipsum. Cras auctor ligula diam, non lacinia eros varius at. Suspendisse posuere eros vulputate faucibus tincidunt. Phasellus mattis massa justo, consectetur volutpat ligula pellentesque ut." />
+        </android.support.constraint.ConstraintLayout>
+
+    </ScrollView>
+
+
+    <TextView
+        android:id="@+id/add_to_list"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:background="#E0E0E0"
+        android:gravity="center"
+        android:text="add to list"
+        android:textColor="#404040"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/add_to_cart"
+        app:layout_constraintStart_toStartOf="@+id/scroll" />
+
+    <TextView
+        android:id="@+id/add_to_cart"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:background="@color/target_red"
+        android:gravity="center"
+        android:text="add to cart"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/add_to_list" />
+
+</android.support.constraint.ConstraintLayout>

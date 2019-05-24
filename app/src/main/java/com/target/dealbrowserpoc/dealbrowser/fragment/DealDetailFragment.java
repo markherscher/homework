@@ -28,7 +28,7 @@ import io.realm.Realm;
 
 public class DealDetailFragment extends BaseFragment {
     private final static String GUID_KEY = "guid-key";
-    private final int CENTS_PER_DOLLAR = 100;
+    private final static int CENTS_PER_DOLLAR = 100;
     private final NumberFormat dollarFormat = new DecimalFormat("$0.00");
 
     @BindView(R.id.title)
@@ -123,7 +123,7 @@ public class DealDetailFragment extends BaseFragment {
         titleLabel.setText(deal.getTitle());
         descriptionLabel.setText(deal.getDescription());
         GlideApp.with(this).load(deal.getImageUrl())
-                .centerInside()
+                .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(imageView); // TODO: add placeholder
     }
