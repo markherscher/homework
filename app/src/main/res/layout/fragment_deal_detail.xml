@@ -48,27 +48,30 @@
 
             <TextView
                 android:id="@+id/actual_price"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:lines="1"
                 android:textColor="@color/target_red"
                 android:textSize="34sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/regular_price"
                 app:layout_constraintBottom_toTopOf="@+id/title"
                 app:layout_constraintStart_toStartOf="@+id/guideline_start"
                 tools:text="$8.00" />
 
             <TextView
                 android:id="@+id/regular_price"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:gravity="end"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:lines="1"
                 android:textColor="#999999"
                 android:textSize="28sp"
-                app:layout_constraintBottom_toTopOf="@+id/title"
+                app:layout_constraintTop_toTopOf="@+id/actual_price"
+                app:layout_constraintBottom_toBottomOf="@+id/actual_price"
                 app:layout_constraintEnd_toEndOf="@+id/guideline_end"
+                app:layout_constraintStart_toEndOf="@+id/actual_price"
                 tools:text="Reg: $8.00" />
 
             <TextView
