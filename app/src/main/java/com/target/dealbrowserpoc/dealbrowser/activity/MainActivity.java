@@ -9,7 +9,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.target.dealbrowserpoc.dealbrowser.R;
+import com.target.dealbrowserpoc.dealbrowser.fragment.BaseFragment;
 import com.target.dealbrowserpoc.dealbrowser.fragment.DealListFragment;
+import com.target.dealbrowserpoc.dealbrowser.fragment.DealsContainerFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,13 +27,16 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.view_pager)
     ViewPager viewPager;
 
+    private TabAdapter tabAdapter;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstancedState) {
         super.onCreate(savedInstancedState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        viewPager.setAdapter(new TabAdapter(getSupportFragmentManager()));
+        tabAdapter = new TabAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(tabAdapter);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
             @Override
@@ -51,8 +56,28 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        Object o = tabAdapter.instantiateItem(viewPager, viewPager.getCurrentItem());
+        if (o instanceof BaseFragment) {
+            if (!((BaseFragment) o).handleBackPressed()) {
+                finish();
+            }
+        }
+    }
+
     private void resetTab() {
-        // TODO: reset to root container fragment
+        // Remove all but the base child fragment from the tab's root fragment
+        Object o = tabAdapter.instantiateItem(viewPager, viewPager.getCurrentItem());
+        if (o instanceof Fragment) {
+            Fragment fragment = (Fragment) o;
+            if (fragment.getActivity() != null) {
+                FragmentManager fm = fragment.getChildFragmentManager();
+                while (fm.getBackStackEntryCount() > 1) {
+                    fm.popBackStackImmediate();
+                }
+            }
+        }
     }
 
     private class TabAdapter extends FragmentPagerAdapter {
@@ -64,7 +89,7 @@ public class MainActivity extends BaseActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case DEAL_TAB_INDEX:
-                    return DealListFragment.newInstance();
+                    return DealsContainerFragment.newInstance();
                 case CART_TAB_INDEX:
                     return DealListFragment.newInstance(); // TODO
                 default:

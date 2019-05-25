@@ -107,6 +107,8 @@ public class DealListFragment extends BaseFragment
         super.onAttach(context);
         if (context instanceof Listener) {
             listener = (Listener) context;
+        } else if (getParentFragment() instanceof Listener) {
+            listener = (Listener) getParentFragment();
         }
     }
 
