@@ -1,8 +1,11 @@
 package com.target.dealbrowserpoc.dealbrowser.fragment;
 
+import android.arch.lifecycle.Observer;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -17,6 +20,7 @@ import com.target.dealbrowserpoc.dealbrowser.adapter.LinearLayoutMarginDecorator
 import com.target.dealbrowserpoc.dealbrowser.core.GlideApp;
 import com.target.dealbrowserpoc.dealbrowser.model.Deal;
 import com.target.dealbrowserpoc.dealbrowser.model.Sort;
+import com.target.dealbrowserpoc.dealbrowser.service.DealApiService;
 
 import butterknife.BindDimen;
 import butterknife.BindInt;
@@ -35,12 +39,25 @@ public class DealListFragment extends BaseFragment
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+
     @BindView(R.id.layout_switcher)
     ImageView layoutSwitcher;
+
     @BindView(R.id.search)
     SearchView searchView;
+
+    @BindView(R.id.loading)
+    View loadingIndicator;
+
+    @BindView(R.id.loading_error)
+    View loadingError;
+
+    @BindView(R.id.refresh)
+    View refresh;
+
     @BindDimen(R.dimen.deal_list_separator_height)
     int rowSeparatorHeight;
+
     @BindInt(R.integer.deal_list_max_columns)
     int maxColumns;
 
@@ -54,6 +71,32 @@ public class DealListFragment extends BaseFragment
 
     public static DealListFragment newInstance() {
         return new DealListFragment();
+    }
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        DealApiService.getState().isRunning().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                boolean isLoading = aBoolean == null ? false : aBoolean;
+                refresh.setEnabled(!isLoading);
+                refresh.setAlpha(isLoading ? 0.5f : 1.0f);
+                loadingIndicator.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+                recyclerView.setVisibility(isLoading ? View.GONE : View.VISIBLE);
+            }
+        });
+
+        DealApiService.getState().wasLastSuccessful().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean isSuccessful) {
+                if (isSuccessful != null) {
+                    loadingError.setVisibility(isSuccessful ? View.GONE : View.VISIBLE);
+                    recyclerView.setVisibility(isSuccessful ? View.VISIBLE : View.GONE);
+                } else {
+                    loadingError.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
@@ -141,6 +184,14 @@ public class DealListFragment extends BaseFragment
                     R.layout.dialog_sort,
                     R.layout.view_simple_list_adapter);
             sortDialog.show();
+        }
+    }
+
+    @OnClick(R.id.refresh)
+    void onRefreshClicked() {
+        Context context = getContext();
+        if (context != null) {
+            context.startService(new Intent(context, DealApiService.class));
         }
     }
 

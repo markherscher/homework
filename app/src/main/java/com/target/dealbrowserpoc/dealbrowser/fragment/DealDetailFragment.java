@@ -1,5 +1,6 @@
 package com.target.dealbrowserpoc.dealbrowser.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -52,6 +53,7 @@ public class DealDetailFragment extends BaseFragment {
     private String imageUrl;
     private Realm realm;
     private RealmResults<CartEntry> cartResults;
+    private Listener listener;
 
     public static DealDetailFragment newInstance(@NonNull String dealGuid) {
         DealDetailFragment fragment = new DealDetailFragment();
@@ -106,9 +108,25 @@ public class DealDetailFragment extends BaseFragment {
         realm.close();
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Listener) {
+            listener = (Listener) context;
+        } else if (getParentFragment() instanceof Listener) {
+            listener = (Listener) getParentFragment();
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
+    }
+
     @OnClick(R.id.add_to_list)
     void onAddToListClicked() {
-
+        // Maybe someday...
     }
 
     @OnClick(R.id.add_to_cart)
@@ -121,6 +139,13 @@ public class DealDetailFragment extends BaseFragment {
         Intent intent = new Intent(getContext(), PhotoActivity.class);
         intent.putExtra(PhotoActivity.IMAGE_URL_KEY, imageUrl);
         startActivity(intent);
+    }
+
+    @OnClick(R.id.arrow_back)
+    void onBackArrowClicked() {
+        if (listener != null) {
+            listener.onBackArrowPressed(this);
+        }
     }
 
     private void showDeal(Deal deal) {
@@ -183,5 +208,9 @@ public class DealDetailFragment extends BaseFragment {
                 addToCartButton.setText(getString(R.string.add_to_cart_fmt, count));
             }
         }
+    }
+
+    public interface Listener {
+        void onBackArrowPressed(@NonNull DealDetailFragment fragment);
     }
 }

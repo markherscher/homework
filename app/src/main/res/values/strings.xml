@@ -4,11 +4,13 @@
     <string name="product_image_content_description">Product Image</string>
     <string name="cart_increase_content_description">Increase Count</string>
     <string name="cart_decrease_content_description">Decrease Count</string>
+    <string name="go_back_content_description">Go Back</string>
     <string name="or">or</string>
     <string name="ship">Ship</string>
     <string name="sort_name">Name</string>
     <string name="sort">Sort By</string>
     <string name="toggle_layout">Toggle View Style</string>
+    <string name="refresh">Refresh</string>
     <string name="sort_price_descending">Price (high to low)</string>
     <string name="sort_price_ascending">Price (low to high)</string>
     <string name="regular_price_fmt">Reg: %s</string>
@@ -20,4 +22,5 @@
     <string name="tab_cart">Cart</string>
     <string name="tab_deals">Deals</string>
     <string name="checkout_snackbar">Thanks for shopping at Target!</string>
+    <string name="loading_error">There was an error loading today\'s deals. Check your Internet connection and hit the refresh button above.</string>
 </resources>

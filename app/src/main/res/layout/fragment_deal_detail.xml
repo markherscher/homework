@@ -19,6 +19,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <ImageView
+                android:id="@+id/arrow_back"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:contentDescription="@string/go_back_content_description"
+                android:padding="10dp"
+                android:src="@drawable/nav_arrow_back"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <android.support.constraint.Guideline
                 android:id="@+id/guideline_start"
                 android:layout_width="wrap_content"
@@ -37,14 +47,13 @@
                 android:id="@+id/image"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
                 android:contentDescription="@string/product_image_content_description"
                 app:layout_constraintBottom_toTopOf="@+id/actual_price"
                 app:layout_constraintEnd_toEndOf="@+id/guideline_end"
                 app:layout_constraintHeight_min="300dp"
                 app:layout_constraintStart_toStartOf="@+id/guideline_start"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/arrow_back" />
 
             <TextView
                 android:id="@+id/actual_price"

@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 import com.target.dealbrowserpoc.dealbrowser.R;
 import com.target.dealbrowserpoc.dealbrowser.model.Deal;
 
-public class DealsContainerFragment extends BaseFragment implements DealListFragment.Listener {
+public class DealsContainerFragment extends BaseFragment implements DealListFragment.Listener,
+        DealDetailFragment.Listener {
     public static DealsContainerFragment newInstance() {
         return new DealsContainerFragment();
     }
@@ -37,5 +38,10 @@ public class DealsContainerFragment extends BaseFragment implements DealListFrag
                 .replace(R.id.container, DealDetailFragment.newInstance(deal.getGuid()))
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onBackArrowPressed(@NonNull DealDetailFragment fragment) {
+        handleBackPressed();
     }
 }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- focusableInTouchMode is a hack to prevent the SearchView from opening the keyboard -->
+<?xml version="1.0" encoding="utf-8"?><!-- focusableInTouchMode is a hack to prevent the SearchView from opening the keyboard -->
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -18,14 +17,26 @@
         app:queryHint="search name" />
 
     <ImageView
+        android:id="@+id/refresh"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="?android:attr/actionBarItemBackground"
+        android:contentDescription="@string/refresh"
+        android:padding="10dp"
+        android:src="@drawable/refresh"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
         android:id="@+id/layout_switcher"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="?android:attr/actionBarItemBackground"
         android:contentDescription="@string/toggle_layout"
         android:padding="10dp"
+        android:layout_marginEnd="15dp"
         android:src="@drawable/grid_option"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/refresh"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
@@ -45,6 +56,30 @@
         android:layout_height="0dp"
         android:background="#C2C2C2"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sort" />
+
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sort" />
+
+    <TextView
+        android:id="@+id/loading_error"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+        android:gravity="center"
+        android:text="@string/loading_error"
+        android:textColor="@color/target_red"
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sort" />
 
 </android.support.constraint.ConstraintLayout>
