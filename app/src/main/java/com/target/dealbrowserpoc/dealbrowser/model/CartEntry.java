@@ -36,7 +36,7 @@ public class CartEntry extends RealmObject {
     }
 
     public void setCount(int count) {
-        this.count = Math.min(count, MAX_COUNT);
+        this.count = Math.max(Math.min(count, MAX_COUNT), 0);
     }
 
     @Override

@@ -18,9 +18,7 @@ import com.target.dealbrowserpoc.dealbrowser.activity.PhotoActivity;
 import com.target.dealbrowserpoc.dealbrowser.core.GlideApp;
 import com.target.dealbrowserpoc.dealbrowser.model.CartEntry;
 import com.target.dealbrowserpoc.dealbrowser.model.Deal;
-
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
+import com.target.dealbrowserpoc.dealbrowser.util.DollarFormatter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,8 +29,6 @@ import io.realm.RealmResults;
 
 public class DealDetailFragment extends BaseFragment {
     private final static String GUID_KEY = "guid-key";
-    private final static int CENTS_PER_DOLLAR = 100;
-    private final NumberFormat dollarFormat = new DecimalFormat("$0.00");
 
     @BindView(R.id.title)
     TextView titleLabel;
@@ -136,7 +132,7 @@ public class DealDetailFragment extends BaseFragment {
 
         if (actualPrice != regularPrice) {
             // Strike out the price portion
-            String pricePortion = dollarFormat.format(regularPrice / (float) CENTS_PER_DOLLAR);
+            String pricePortion = DollarFormatter.fromCents(regularPrice);
             SpannableString span = new SpannableString(getString(R.string.regular_price_fmt, pricePortion));
             span.setSpan(new StrikethroughSpan(),
                     span.length() - pricePortion.length(),
@@ -147,7 +143,7 @@ public class DealDetailFragment extends BaseFragment {
         }
 
         regularPriceLabel.setText(regularPriceText);
-        actualPriceLabel.setText(dollarFormat.format(actualPrice / (float) CENTS_PER_DOLLAR));
+        actualPriceLabel.setText(DollarFormatter.fromCents(actualPrice));
 
         titleLabel.setText(deal.getTitle());
         descriptionLabel.setText(deal.getDescription());

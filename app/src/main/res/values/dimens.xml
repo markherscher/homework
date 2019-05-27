@@ -5,6 +5,7 @@
     <dimen name="deal_list_item_image_size">120dp</dimen>
     <dimen name="deal_list_item_outer_margin">15dp</dimen>
     <dimen name="deal_list_separator_height">1dp</dimen>
+    <dimen name="button_height">60dp</dimen>
 
     <integer name="deal_list_max_columns">1</integer>
 </resources>

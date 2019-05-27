@@ -102,28 +102,20 @@
 
     <TextView
         android:id="@+id/add_to_list"
+        style="@style/GrayButton"
         android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:background="#E0E0E0"
-        android:foreground="?attr/selectableItemBackground"
-        android:gravity="center"
+        android:layout_height="@dimen/button_height"
         android:text="@string/add_to_list"
-        android:textColor="#404040"
-        android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/add_to_cart"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/add_to_cart"
+        style="@style/RedButton"
         android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:background="@color/target_red"
-        android:foreground="?attr/selectableItemBackground"
-        android:gravity="center"
+        android:layout_height="@dimen/button_height"
         android:text="@string/add_to_cart"
-        android:textColor="#FFFFFF"
-        android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/add_to_list" />

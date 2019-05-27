@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Deal Browser</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
     <string name="product_image_content_description">Product Image</string>
-
+    <string name="cart_increase_content_description">Increase Count</string>
+    <string name="cart_decrease_content_description">Decrease Count</string>
     <string name="or">or</string>
     <string name="ship">Ship</string>
     <string name="sort_name">Name</string>
@@ -13,9 +12,12 @@
     <string name="sort_price_descending">Price (high to low)</string>
     <string name="sort_price_ascending">Price (low to high)</string>
     <string name="regular_price_fmt">Reg: %s</string>
+    <string name="total_price_fmt">Total: %s</string>
     <string name="add_to_list">add to list</string>
     <string name="add_to_cart">add to cart</string>
     <string name="add_to_cart_fmt">add to cart (%d)</string>
+    <string name="check_out">Check Out</string>
     <string name="tab_cart">Cart</string>
     <string name="tab_deals">Deals</string>
+    <string name="checkout_snackbar">Thanks for shopping at Target!</string>
 </resources>

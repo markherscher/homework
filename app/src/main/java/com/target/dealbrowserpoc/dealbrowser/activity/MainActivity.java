@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 
 import com.target.dealbrowserpoc.dealbrowser.R;
 import com.target.dealbrowserpoc.dealbrowser.fragment.BaseFragment;
+import com.target.dealbrowserpoc.dealbrowser.fragment.CartContainerFragment;
 import com.target.dealbrowserpoc.dealbrowser.fragment.DealListFragment;
 import com.target.dealbrowserpoc.dealbrowser.fragment.DealsContainerFragment;
 
@@ -91,7 +92,7 @@ public class MainActivity extends BaseActivity {
                 case DEAL_TAB_INDEX:
                     return DealsContainerFragment.newInstance();
                 case CART_TAB_INDEX:
-                    return DealListFragment.newInstance(); // TODO
+                    return CartContainerFragment.newInstance();
                 default:
                     throw new IllegalArgumentException("unknown position");
             }
