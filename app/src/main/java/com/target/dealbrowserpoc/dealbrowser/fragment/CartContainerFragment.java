@@ -14,7 +14,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 
-public class CartContainerFragment extends BaseFragment implements CartFragment.Listener {
+public class CartContainerFragment extends BaseFragment implements CartFragment.Listener,
+        DealDetailFragment.Listener {
     @BindView(R.id.container)
     View container;
 
@@ -61,5 +62,10 @@ public class CartContainerFragment extends BaseFragment implements CartFragment.
         });
 
         realm.close();
+    }
+
+    @Override
+    public void onBackArrowPressed(@NonNull DealDetailFragment fragment) {
+        handleBackPressed();
     }
 }
