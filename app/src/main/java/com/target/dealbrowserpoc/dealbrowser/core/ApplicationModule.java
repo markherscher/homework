@@ -1,34 +1,32 @@
-package com.target.dealbrowserpoc.dealbrowser.api;
+package com.target.dealbrowserpoc.dealbrowser.core;
+
+import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
+import com.target.dealbrowserpoc.dealbrowser.BuildConfig;
+import com.target.dealbrowserpoc.dealbrowser.api.ApiLink;
 
+import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * Helper class to create an instance of the {@code ApiLink} interface for use by Retrofit.
- */
-public class ApiLinkFactory {
-    private ApiLink apiLink;
-
-    public ApiLinkFactory(String rootUrl) {
-        this(rootUrl, true);
-    }
-
-    public ApiLinkFactory(String rootUrl, boolean useLogging) {
+@Module
+public class ApplicationModule {
+    @Provides
+    @Singleton
+    ApiLink providesApiLink() {
         Retrofit retrofit = new Retrofit.Builder()
-                .client(createHttpOk(useLogging))
-                .baseUrl(rootUrl)
+                .client(createHttpOk(true))
+                .baseUrl(BuildConfig.API_URL)
                 .addConverterFactory(GsonConverterFactory.create(new Gson()))
                 .build();
 
-        apiLink = retrofit.create(ApiLink.class);
-    }
-
-    public ApiLink getInstance() {
-        return apiLink;
+        return retrofit.create(ApiLink.class);
     }
 
     private OkHttpClient createHttpOk(boolean useLogging) {

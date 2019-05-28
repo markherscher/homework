@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'realm-android'
 
+def API_URL = "API_URL"
+
 android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
@@ -11,6 +13,8 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+
+        buildConfigField "String", API_URL, "\"http://target-deals.herokuapp.com/\""
     }
     buildTypes {
         release {
@@ -37,7 +41,9 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.3.1'
     implementation 'io.realm:android-adapters:3.1.0'
     implementation 'com.jakewharton:butterknife:8.6.0'
+    implementation 'com.google.dagger:dagger:2.11'
 
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 }

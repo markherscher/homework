@@ -1,6 +1,7 @@
 package com.target.dealbrowserpoc.dealbrowser.service;
 
 import android.app.IntentService;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.Intent;
@@ -16,14 +17,18 @@ import com.target.dealbrowserpoc.dealbrowser.model.Deal;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import io.realm.Realm;
 import retrofit2.Response;
 import timber.log.Timber;
 
 public class DealApiService extends IntentService {
-    private static State state = new State();
+    private static final State state = new State();
+
+    @Inject
+    ApiLink apiLink;
     private Realm realm;
-    private ApiLink apiLink;
 
     public static State getState() {
         return state;
@@ -31,11 +36,12 @@ public class DealApiService extends IntentService {
 
     public DealApiService() {
         super(DealApiService.class.getName());
-        apiLink = DealsApplication.getInstance().getApiLink();
     }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
+        ((DealsApplication) getApplication()).getComponent().inject(this);
+
         realm = Realm.getDefaultInstance();
         Response<DataListApi<DealApi>> response = null;
         boolean successful = false;
@@ -139,11 +145,11 @@ public class DealApiService extends IntentService {
         private final MutableLiveData<Boolean> isRunning = new MutableLiveData<>();
         private final MutableLiveData<Boolean> wasLastSuccessful = new MutableLiveData<>();
 
-        public MutableLiveData<Boolean> isRunning() {
+        public LiveData<Boolean> isRunning() {
             return isRunning;
         }
 
-        public MutableLiveData<Boolean> wasLastSuccessful() {
+        public LiveData<Boolean> wasLastSuccessful() {
             return wasLastSuccessful;
         }
     }
