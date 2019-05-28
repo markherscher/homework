@@ -8,6 +8,7 @@ import com.target.dealbrowserpoc.dealbrowser.core.GlideApp;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class PhotoActivity extends BaseActivity {
     public static final String IMAGE_URL_KEY = "image-url-key";
@@ -26,5 +27,10 @@ public class PhotoActivity extends BaseActivity {
         }
 
         GlideApp.with(this).load(imageUrl).centerInside().into(imageView);
+    }
+
+    @OnClick(R.id.back_arrow)
+    void onBackArrowClicked() {
+        finish();
     }
 }
