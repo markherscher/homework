@@ -34,6 +34,7 @@ import io.realm.RealmQuery;
 public class DealListFragment extends BaseFragment
         implements SimpleChoiceDialog.Delegate<Sort>, SimpleChoiceDialog.Listener<Sort> {
     private static final String LAYOUT_MODE_KEY = "layout-mode-key";
+    private static final String SORT_KEY = "sort-key";
     private static final int LAYOUT_MODE_LIST = 0;
     private static final int LAYOUT_MODE_GRID = 1;
 
@@ -120,6 +121,10 @@ public class DealListFragment extends BaseFragment
                 ? LAYOUT_MODE_LIST
                 : savedInstanceState.getInt(LAYOUT_MODE_KEY, LAYOUT_MODE_LIST);
 
+        sort = savedInstanceState == null
+                ? Sort.NAME
+                : Sort.values()[savedInstanceState.getInt(SORT_KEY, Sort.NAME.ordinal())];
+
         setupAdapter();
         return view;
     }
@@ -164,6 +169,7 @@ public class DealListFragment extends BaseFragment
     public void onSaveInstanceState(@NonNull Bundle out) {
         super.onSaveInstanceState(out);
         out.putInt(LAYOUT_MODE_KEY, layoutMode);
+        out.putInt(SORT_KEY, sort.ordinal());
     }
 
     @OnClick(R.id.layout_switcher)
