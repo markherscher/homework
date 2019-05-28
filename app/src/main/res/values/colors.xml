@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <drawable name="actionbar_color">@color/target_red</drawable>
-    <drawable name="white_color">#ffffffff</drawable>
-    <drawable name="gray_color">#ff666666</drawable>
     <color name="dark_gray_text">#404040</color>
     <color name="target_red">#BE2C34</color>
 </resources>

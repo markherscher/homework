@@ -26,7 +26,6 @@ public class SimpleChoiceDialog<T> extends Dialog {
     private final Listener<T> listener;
     private final int dialogLayoutResourceId;
     private final int itemLayoutResourceId;
-    private SimpleListAdapter adapter;
 
     public SimpleChoiceDialog(@NonNull Context context,
                               @NonNull Delegate<T> delegate,
@@ -55,7 +54,7 @@ public class SimpleChoiceDialog<T> extends Dialog {
             textList.add(delegate.getStringForItem(t));
         }
 
-        adapter = new SimpleListAdapter(
+        SimpleListAdapter adapter = new SimpleListAdapter(
                 getContext(),
                 textList,
                 itemLayoutResourceId,

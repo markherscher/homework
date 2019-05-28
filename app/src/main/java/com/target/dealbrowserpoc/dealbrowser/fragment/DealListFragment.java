@@ -271,18 +271,19 @@ public class DealListFragment extends BaseFragment
         adapter.updateData(query.findAllAsync());
     }
 
-    private SearchView.OnQueryTextListener searchViewListener = new SearchView.OnQueryTextListener() {
-        @Override
-        public boolean onQueryTextSubmit(String s) {
-            return false;
-        }
+    private final SearchView.OnQueryTextListener searchViewListener =
+            new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    return false;
+                }
 
-        @Override
-        public boolean onQueryTextChange(String s) {
-            executeQuery();
-            return false;
-        }
-    };
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    executeQuery();
+                    return false;
+                }
+            };
 
     public interface Listener {
         void onDealClicked(@NonNull DealListFragment sender, @NonNull Deal deal);
